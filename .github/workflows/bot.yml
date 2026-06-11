@@ -1,0 +1,24 @@
+name: Click Engine
+on:
+  schedule:
+    - cron: '*/30 * * * *' # Har 30 min mein chalega
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with: { node-version: '20' }
+      - name: Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgbm-dev
+          npm install puppeteer puppeteer-extra puppeteer-extra-plugin-stealth axios
+      - name: Run Bot
+        env:
+          TARGET_URL: ${{ secrets.TARGET_URL }}
+        run: node bot.js
+
